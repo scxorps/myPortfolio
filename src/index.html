@@ -242,11 +242,18 @@
                     data-tilt-max-glare="0.5"
                     class="thumbnail rounded js-tilt"
                   >
-                    <img
-                      alt="Project Image"
+                    <video
                       class="img-fluid"
-                      src="assets/project.jpg"
-                    />
+                      autoplay
+                      loop
+                      muted
+                      playsinline
+                      poster="assets/project.jpg"
+                      preload="auto"
+                    >
+                      <source src="assets/weatherly-demo.mp4" type="video/mp4">
+                      <img src="assets/project.jpg" alt="WEATHERLY Project Demo" class="img-fluid">
+                    </video>
                   </div>
                 </a>
               </div>
