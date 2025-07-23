@@ -6,11 +6,6 @@ Portfolio personnel d'un développeur Full Stack passionné par l'innovation tec
 
 **"I'm not famous, Just Effective"** - Ce portfolio présente mes compétences, projets et expériences en développement web.
 
-<h2 align="center">
-  <img src="./examples/example.gif" alt="Portfolio Demo" width="600px" />
-  <br>
-</h2>
-
 ## ✨ Fonctionnalités
 
 ⚡️ Design moderne et responsive\
