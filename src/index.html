@@ -423,6 +423,60 @@
         border-radius: 8px;
       }
     </style>
+
+    <script>
+      // Force video autoplay and loop for better compatibility
+      document.addEventListener('DOMContentLoaded', function() {
+        const videos = document.querySelectorAll('.project-wrapper__image video');
+        
+        videos.forEach(function(video) {
+          // Set video properties
+          video.muted = true;
+          video.loop = true;
+          video.autoplay = true;
+          video.playsInline = true;
+          
+          // Try to play the video
+          const playPromise = video.play();
+          
+          if (playPromise !== undefined) {
+            playPromise.then(function() {
+              // Autoplay started successfully
+              console.log('Video autoplay started successfully');
+            }).catch(function(error) {
+              // Autoplay was prevented, try to play on user interaction
+              console.log('Autoplay was prevented, will try on user interaction');
+              
+              // Play video when it comes into view
+              const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                  if (entry.isIntersecting) {
+                    video.play().catch(function(e) {
+                      console.log('Could not play video:', e);
+                    });
+                  }
+                });
+              }, { threshold: 0.5 });
+              
+              observer.observe(video);
+              
+              // Also try to play on first user interaction
+              document.addEventListener('click', function() {
+                video.play().catch(function(e) {
+                  console.log('Could not play video on click:', e);
+                });
+              }, { once: true });
+            });
+          }
+          
+          // Ensure video loops when it ends
+          video.addEventListener('ended', function() {
+            video.currentTime = 0;
+            video.play();
+          });
+        });
+      });
+    </script>
   </body>
 </html>
 
