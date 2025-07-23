@@ -141,11 +141,16 @@
                     data-tilt-max-glare="0.5"
                     class="thumbnail rounded js-tilt"
                   >
-                    <img
-                      alt="Project Image"
+                    <video
                       class="img-fluid"
-                      src="assets/project.jpg"
-                    />
+                      autoplay
+                      loop
+                      muted
+                      playsinline
+                    >
+                      <source src="assets/demio-demo.mp4" type="video/mp4">
+                      Your browser does not support the video tag.
+                    </video>
                   </div>
                 </a>
               </div>
@@ -399,6 +404,14 @@
       .project-separator {
         margin: 8rem 0;
         padding: 4rem 0;
+      }
+
+      /* Video styling for projects */
+      .project-wrapper__image video {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 8px;
       }
     </style>
   </body>
