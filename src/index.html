@@ -147,11 +147,10 @@
                       loop
                       muted
                       playsinline
-                      poster="assets/project.jpg"
                       preload="auto"
                     >
                       <source src="assets/demio-demo.mp4" type="video/mp4">
-                      <img src="assets/project.jpg" alt="DEMIO Project Demo" class="img-fluid">
+                      Your browser does not support the video tag.
                     </video>
                   </div>
                 </a>
@@ -201,11 +200,10 @@
                       loop
                       muted
                       playsinline
-                      poster="assets/project.jpg"
                       preload="auto"
                     >
                       <source src="assets/dawra-demo.mp4" type="video/mp4">
-                      <img src="assets/project.jpg" alt="DAWRA Project Demo" class="img-fluid">
+                      Your browser does not support the video tag.
                     </video>
                   </div>
                 </a>
@@ -255,11 +253,10 @@
                       loop
                       muted
                       playsinline
-                      poster="assets/project.jpg"
                       preload="auto"
                     >
                       <source src="assets/weatherly-demo.mp4" type="video/mp4">
-                      <img src="assets/project.jpg" alt="WEATHERLY Project Demo" class="img-fluid">
+                      Your browser does not support the video tag.
                     </video>
                   </div>
                 </a>
@@ -432,8 +429,18 @@
 
       /* Specific styling for WEATHERLY video to make it smaller */
       .project-wrapper__image video[src*="weatherly-demo"] {
-        width: 80%;
-        max-width: 500px;
+        width: 70%;
+        max-width: 450px;
+        height: auto;
+        object-fit: contain;
+        margin: 0 auto;
+        display: block;
+      }
+
+      /* Specific styling for DAWRA video to make it smaller */
+      .project-wrapper__image video[src*="dawra-demo"] {
+        width: 70%;
+        max-width: 450px;
         height: auto;
         object-fit: contain;
         margin: 0 auto;
