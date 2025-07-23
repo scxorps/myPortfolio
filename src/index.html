@@ -1,0 +1,405 @@
+<!--
+  Hello!
+  -
+  Simplefolio is a clean and responsive portfolio template for Developers!
+  Created by Jacobo Martinez.
+  -
+  Github Repo: https://github.com/cobiwave/simplefolio/
+  Readme: https://github.com/cobiwave/simplefolio/README.md
+  -
+  For business & inquires, contact me -> jacobojavier98@gmail.com
+-->
+<!DOCTYPE html>
+<html lang="en" class="sr">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/png" href="assets/favicon.png" />
+
+    <!-- Todo: put here your site title -->
+    <title>Mehadji Mohamed El Habib | Developer</title>
+    <!-- Todo: add some coding keywords below - e.g: (javascript, yourusername, etc) -->
+    <meta name="keywords" content="mehadji, mohamed, habib, developer, javascript, skill" />
+    <!-- Todo: improve your SEO by adding a small description of you -->
+    <meta name="description" content="Mehadji Mohamed El Habib | Developer" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="styles.scss" />
+    <script
+      defer
+      src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"
+    ></script>
+
+    <!-- Todo: remove the below script once you finish your portfolio -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </head>
+
+  <!-- Todo: read the following HTML Todos to create your stunning portfolio website -->
+  <body>
+    <div id="top"></div>
+
+    <!-- **** Hero Section **** -->
+    <section id="hero" class="jumbotron">
+      <div class="container">
+        <h1 class="hero-title load-hidden">
+          Hi, my name is <span class="text-color-main">Mehadji Mohamed El Habib</span>
+        </h1>
+        <h1 class="hero-title">
+          <span id="typewriter"></span><span id="cursor">|</span>
+        </h1>
+        <p class="hero-cta load-hidden">
+          <a rel="noreferrer" class="cta-btn cta-btn--hero" href="#about"
+            >Know more</a
+          >
+        </p>
+      </div>
+    </section>
+    <!-- /END Hero Section -->
+
+    <!-- **** About Section **** -->
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title load-hidden">About me</h2>
+        <div class="row about-wrapper">
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__image load-hidden">
+              <img
+                alt="Profile Image"
+                class="img-fluid rounded shadow-lg"
+                height="auto"
+                width="300px"
+                src="assets/profile.jpg"
+                alt="Profile Image"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="about-wrapper__info load-hidden">
+              <p class="about-wrapper__info-text">
+                Hi, I'm Mehadji Mohamed El Habib — a developer who thinks in logic and builds with purpose.
+                I enjoy breaking down complex problems, finding solutions, and turning ideas into working systems.
+              </p>
+              <p class="about-wrapper__info-text">
+                Let's build something smart together.
+              </p>
+              <span class="d-flex mt-3">
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn cta-btn--resume"
+                  href="assets/resume.pdf"
+                >
+                  View Resume
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /END About Section -->
+
+    <!-- **** Projects Section **** -->
+    <section id="projects" class="mt-5 pt-5">
+      <div class="container">
+        <div class="project-wrapper">
+          <h2 class="section-title dark-blue-text mb-5 pb-3">Projects</h2>
+
+          <!-- Notice: each .row is a project -->
+          <div class="row mb-5 pb-5 pt-5">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <h3 class="project-wrapper__text-title">DEMIO</h3>
+                <div>
+                  <p class="mb-4">
+                    A smart tool for predicting and organizing the fight against tuberculosis.
+                    <br><br>
+                    Demio is an AI-powered web app designed to help healthcare teams predict future TB outbreaks across regions and organize vaccination or awareness schedules efficiently. Built with machine learning (LSTM), geospatial data, and a practical planning system, Demio supports local health departments like SEMEP with real-time insights and planning tools.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn text-color-main"
+                  href="#!"
+                >
+                  Source Code
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="#!" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/project.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+
+          <!-- Modern separator line -->
+          <div class="project-separator my-5 py-5">
+            <div class="separator-line"></div>
+          </div>
+
+          <!-- Notice: each .row is a project -->
+          <div class="row mb-5 pb-5 pt-5">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <h3 class="project-wrapper__text-title">DAWRA</h3>
+                <div>
+                  <p class="mb-4">
+                    Dawra is a fresh idea of a trip app that I developed on my Flutter learning path. It presents traveling trips by categories, trips details, trips filtering and favorites section. This project demonstrates my mobile development skills with Flutter, showcasing clean UI design, state management, and user experience optimization for travel enthusiasts.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn text-color-main"
+                  href="https://github.com/scxorps/dawra"
+                >
+                  Source Code
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="#!" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/project.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+
+          <!-- Modern separator line -->
+          <div class="project-separator my-5 py-5">
+            <div class="separator-line"></div>
+          </div>
+
+          <!-- Notice: each .row is a project -->
+          <div class="row mb-5 pb-5 pt-5">
+            <div class="col-lg-4 col-sm-12">
+              <div class="project-wrapper__text load-hidden">
+                <h3 class="project-wrapper__text-title">WEATHERLY</h3>
+                <div>
+                  <p class="mb-4">
+                    A weather app that displays your position's weather condition, sunrise time, sunset time, max/min temp and so many other things that you can adjust within the possible informations given from OpenWeatherMap. This project showcases API integration, geolocation services, responsive design, and real-time data visualization to provide users with comprehensive weather insights.
+                  </p>
+                </div>
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  class="cta-btn text-color-main"
+                  href="https://github.com/scxorps/WEATHERLY"
+                >
+                  Source Code
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-8 col-sm-12">
+              <div class="project-wrapper__image load-hidden">
+                <a rel="noreferrer" href="#!" target="_blank">
+                  <div
+                    data-tilt
+                    data-tilt-max="4"
+                    data-tilt-glare="true"
+                    data-tilt-max-glare="0.5"
+                    class="thumbnail rounded js-tilt"
+                  >
+                    <img
+                      alt="Project Image"
+                      class="img-fluid"
+                      src="assets/project.jpg"
+                    />
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /END Project -->
+        </div>
+      </div>
+    </section>
+    <!-- /END Projects Section -->
+
+    <!-- **** Contact Section **** -->
+    <section id="contact" class="mt-5 pt-5">
+      <div class="container">
+        <h2 class="section-title mb-5 pb-4">Contact</h2>
+        <div class="contact-wrapper load-hidden">
+          <p class="contact-wrapper__text mb-4">I'm always up for smart projects, cool ideas, or interesting conversations.</p>
+          <p class="contact-wrapper__text mb-5">Drop a message — let's make it happen.</p>
+          <a
+            rel="noreferrer"
+            target="_blank"
+            class="cta-btn cta-btn--resume"
+            href="mailto:mohamed79163@email.com"
+            >Call to Action</a
+          >
+        </div>
+      </div>
+    </section>
+    <!-- /END Contact Section -->
+
+    <!-- **** Footer Section **** -->
+    <footer class="footer navbar-static-bottom mt-4 pt-4">
+      <div class="container">
+        <a rel="noreferrer" href="#top" class="back-to-top">
+          <i class="fa fa-angle-up fa-2x" aria-hidden="true"></i>
+        </a>
+        <div class="social-links">
+          <a rel="noreferrer" href="https://www.instagram.com/mohamed__mehadji?igsh=ZHluY2E5MmJjdzEx" target="_blank">
+            <i class="fa fa-instagram fa-inverse"></i>
+          </a>
+          <a rel="noreferrer" href="https://www.linkedin.com/in/mohamed-mehadji-a65649179/" target="_blank">
+            <i class="fa fa-linkedin fa-inverse"></i>
+          </a>
+          <a rel="noreferrer" href="https://github.com/scxorps" target="_blank">
+            <i class="fa fa-github fa-inverse"></i>
+          </a>
+        </div>
+
+        <hr />
+
+        <!-- Notice: if you want to give me some credit, it will be huge for me! if not, put your data on it -->
+        <!--
+        <p class="footer__text">
+          © 2021 - Template developed by
+          <a rel="noreferrer" href="https://github.com/cobiwave" target="_blank"
+            >Jacobo Martínez</a
+          >
+        </p>
+
+        <!-- TO DO: remove this entire paragraph once you finish your portfolio -->
+        <!--
+        <p class="mt-3 pt-3">
+          <a
+            rel="noreferrer"
+            class="github-button"
+            href="https://github.com/cobiwave/simplefolio/fork"
+            data-icon="octicon-repo-forked"
+            data-size="large"
+            data-show-count="true"
+            aria-label="Fork ntkme/github-buttons on GitHub"
+            >Fork</a
+          >
+          <a
+            rel="noreferrer" 
+            class="github-button"
+            href="https://github.com/cobiwave/simplefolio"
+            data-icon="octicon-star"
+            data-size="large"
+            data-show-count="true"
+            aria-label="Star cobiwave/simplefolio on GitHub"
+            >Star</a
+          >
+        </p>
+        -->
+      </div>
+    </footer>
+    <!-- /END Footer Section -->
+
+    <script defer type="module" src="index.js"></script>
+    
+    <style>
+      #cursor {
+        animation: blink 1s infinite;
+      }
+      
+      @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+      }
+
+      /* Modern separator styles */
+      .project-separator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin: 6rem 0;
+        padding: 3rem 0;
+      }
+
+      .separator-line {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, #00d4ff 20%, #5856d6 50%, #00d4ff 80%, transparent 100%);
+        position: relative;
+        animation: shimmer 3s ease-in-out infinite;
+      }
+
+      .separator-dot {
+        display: none;
+      }
+
+      @keyframes shimmer {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+      }
+
+      /* Ensure Contact section is visible */
+      #contact {
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        z-index: 10;
+      }
+
+      .contact-wrapper {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+      }
+
+      /* Add scroll padding to body for better spacing */
+      body {
+        scroll-padding-top: 2rem;
+      }
+
+      /* Projects section height adjustment */
+      #projects {
+        min-height: 100vh;
+        padding-bottom: 8rem;
+      }
+
+      /* Ensure proper page flow */
+      .project-separator {
+        margin: 8rem 0;
+        padding: 4rem 0;
+      }
+    </style>
+  </body>
+</html>

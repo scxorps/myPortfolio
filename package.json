@@ -1,0 +1,38 @@
+{
+  "name": "myportfolio",
+  "version": "1.0.1",
+  "private": "true",
+  "description": "Portfolio personnel de Mehadji Mohamed El Habib - Développeur Full Stack",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel --port 4000 --no-cache --no-source-maps --host localhost",
+    "dev": "parcel --port 4000 --no-cache --hmr-port 4001",
+    "serve": "npm run build && http-server dist -p 5000 -o",
+    "restart": "taskkill /F /IM node.exe >nul 2>&1 & if exist .parcel-cache rmdir /s /q .parcel-cache & if exist dist rmdir /s /q dist & npm start",
+    "clean": "if exist .parcel-cache rmdir /s /q .parcel-cache & if exist dist rmdir /s /q dist",
+    "build": "parcel build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scxorps/myPortfolio"
+  },
+  "keywords": ["portfolio", "developer", "react", "javascript", "web-development"],
+  "author": "Mehadji Mohamed El Habib",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scxorps/myPortfolio/issues"
+  },
+  "homepage": "https://scxorps.github.io/myPortfolio",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.8.2",
+    "parcel": "^2.8.2",
+    "prettier": "^2.8.1"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.3",
+    "jquery": "^3.6.3",
+    "popper.js": "^1.16.1",
+    "vanilla-tilt": "^1.8.0"
+  }
+}

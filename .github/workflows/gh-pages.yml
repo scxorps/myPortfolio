@@ -1,0 +1,57 @@
+# Workflow de déploiement automatique du portfolio
+name: Deploy Portfolio to GitHub Pages
+
+# Déclenche le workflow sur push vers la branche principale
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+# Permissions nécessaires pour GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # Job de construction et déploiement
+  build-and-deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      # Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm ci
+
+      # Build project
+      - name: Build Portfolio
+        run: npm run build
+        
+      # Setup GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+        
+      # Upload build artifacts
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: './dist'
+          
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
