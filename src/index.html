@@ -419,32 +419,27 @@
         padding: 4rem 0;
       }
 
-      /* Video styling for projects */
+      /* Video styling for projects - different dimensions based on app type */
       .project-wrapper__image video {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
         border-radius: 8px;
+        margin: 0 auto;
+        display: block;
+        object-fit: cover;
       }
 
-      /* Specific styling for WEATHERLY video to make it smaller */
+      /* Desktop application styling - DEMIO */
+      .project-wrapper__image video[src*="demio-demo"] {
+        height: 280px;    /* Desktop height */
+        width: 100%;      /* Full width for desktop app */
+        max-width: 500px; /* Max width to maintain desktop proportions */
+      }
+
+      /* Mobile applications styling - DAWRA and WEATHERLY */
+      .project-wrapper__image video[src*="dawra-demo"],
       .project-wrapper__image video[src*="weatherly-demo"] {
-        width: 70%;
-        max-width: 450px;
-        height: auto;
-        object-fit: contain;
-        margin: 0 auto;
-        display: block;
-      }
-
-      /* Specific styling for DAWRA video to make it smaller */
-      .project-wrapper__image video[src*="dawra-demo"] {
-        width: 70%;
-        max-width: 450px;
-        height: auto;
-        object-fit: contain;
-        margin: 0 auto;
-        display: block;
+        height: 280px;    /* Reduced height for mobile apps */
+        width: auto;      /* Auto width to maintain mobile proportions */
+        max-width: 200px; /* Narrower max width for mobile apps */
       }
     </style>
 
