@@ -5,13 +5,9 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
@@ -25,31 +21,23 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
-        
-    - name: Debug - List files
-      run: ls -la
         
     - name: Install dependencies
       run: npm ci
       
-    - name: Debug - Check Node and npm versions
-      run: |
-        node --version
-        npm --version
-        
     - name: Build project
       run: npm run build
       
     - name: Create .nojekyll in dist
       run: touch dist/.nojekyll
       
-    - name: Debug - List dist files
+    - name: List dist contents
       run: ls -la dist/
       
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
         force_orphan: true
+        enable_jekyll: false
