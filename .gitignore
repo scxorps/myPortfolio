@@ -9,8 +9,8 @@ dist/
 .parcel-cache/
 *.log
 
-# Generated files (compiled versions at root)
-index.html
+# Generated files (compiled versions at root) - only ignore on dev
+# index.html - REMOVED to allow tracking source changes
 index.*.css
 index.*.css.map
 index.*.js
@@ -21,9 +21,9 @@ weatherly-demo.*.mp4
 dawra-demo.*.mp4
 demio-demo.*.mp4
 
-# Large media files
-src/assets/*.mp4
-*.mp4
+# Large media files - allow assets to be tracked
+# src/assets/*.mp4 - REMOVED to allow tracking assets
+# *.mp4 - REMOVED to allow tracking demo videos
 
 # Environment variables
 .env
