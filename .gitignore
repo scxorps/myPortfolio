@@ -9,6 +9,9 @@ dist/
 .parcel-cache/
 *.log
 
+# Source maps (not needed in production)
+*.map
+
 # Source files (ignore on prod - only keep compiled files)
 src/
 
