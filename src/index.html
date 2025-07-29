@@ -430,21 +430,58 @@
         margin: 0 auto;
         display: block;
         object-fit: cover;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
       }
 
-      /* Desktop application styling - DEMIO */
+      /* Desktop application styling - DEMIO (16:9 aspect ratio) */
       .project-wrapper__image video[src*="demio-demo"] {
-        height: 280px;    /* Desktop height */
-        width: 100%;      /* Full width for desktop app */
-        max-width: 500px; /* Max width to maintain desktop proportions */
+        height: 300px;
+        width: 100%;
+        max-width: 550px;
+        aspect-ratio: 16/9;
       }
 
-      /* Mobile applications styling - DAWRA and WEATHERLY */
+      /* Mobile applications styling - DAWRA and WEATHERLY (9:16 aspect ratio) */
       .project-wrapper__image video[src*="dawra-demo"],
       .project-wrapper__image video[src*="weatherly-demo"] {
-        height: 280px;    /* Reduced height for mobile apps */
-        width: auto;      /* Auto width to maintain mobile proportions */
-        max-width: 200px; /* Narrower max width for mobile apps */
+        height: 400px;
+        width: auto;
+        max-width: 225px;
+        aspect-ratio: 9/16;
+      }
+
+      /* Hover effect for all videos */
+      .project-wrapper__image video:hover {
+        transform: scale(1.02);
+      }
+
+      /* Responsive adjustments for tablets */
+      @media (max-width: 768px) {
+        .project-wrapper__image video[src*="demio-demo"] {
+          height: 250px;
+          max-width: 450px;
+        }
+        
+        .project-wrapper__image video[src*="dawra-demo"],
+        .project-wrapper__image video[src*="weatherly-demo"] {
+          height: 350px;
+          max-width: 200px;
+        }
+      }
+
+      /* Responsive adjustments for mobile */
+      @media (max-width: 480px) {
+        .project-wrapper__image video[src*="demio-demo"] {
+          height: 200px;
+          max-width: 350px;
+        }
+        
+        .project-wrapper__image video[src*="dawra-demo"],
+        .project-wrapper__image video[src*="weatherly-demo"] {
+          height: 280px;
+          max-width: 160px;
+        }
       }
     </style>
 
