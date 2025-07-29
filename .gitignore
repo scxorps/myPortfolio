@@ -4,8 +4,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Build outputs (ignore on prod - only keep compiled files at root)
-dist/
+# Build outputs (ignore on dev - but keep compiled files on prod)
+# dist/ - commented out for prod branch to allow compiled files
 .parcel-cache/
 *.log
 
