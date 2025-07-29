@@ -17,17 +17,22 @@ try {
     Write-Host "Source changes committed (if any)" -ForegroundColor Green
 
     # 3. Push dev branch
-    Write-Host "[3/6] Pushing dev branch to origin..." -ForegroundColor Yellow
+    Write-Host "[3/7] Pushing dev branch to origin..." -ForegroundColor Yellow
     git push origin dev
     if ($LASTEXITCODE -ne 0) { throw "Failed to push dev branch" }
 
-    # 4. Build project
-    Write-Host "[4/6] Building project with Parcel..." -ForegroundColor Yellow
+    # 4. Install dependencies
+    Write-Host "[4/7] Installing dependencies..." -ForegroundColor Yellow
+    npm install
+    if ($LASTEXITCODE -ne 0) { throw "Failed to install dependencies" }
+
+    # 5. Build project
+    Write-Host "[5/7] Building project with Parcel..." -ForegroundColor Yellow
     npm run build
     if ($LASTEXITCODE -ne 0) { throw "Build failed" }
 
-    # 5. Switch to prod and deploy
-    Write-Host "[5/6] Switching to prod and deploying..." -ForegroundColor Yellow
+    # 6. Switch to prod and deploy
+    Write-Host "[6/7] Switching to prod and deploying..." -ForegroundColor Yellow
     git checkout prod
     if ($LASTEXITCODE -ne 0) { throw "Failed to switch to prod branch" }
 
@@ -36,7 +41,7 @@ try {
     Copy-Item "assets\*.mp4" -Destination "." -Force -ErrorAction SilentlyContinue
     
     # Fix absolute paths in HTML for GitHub Pages AFTER copying
-    Write-Host "[5.1/6] Fixing absolute paths for GitHub Pages..." -ForegroundColor Yellow
+    Write-Host "[6.1/7] Fixing absolute paths for GitHub Pages..." -ForegroundColor Yellow
     $htmlContent = Get-Content "index.html" -Raw
     
     # Replace absolute paths with relative paths (more comprehensive)
@@ -63,8 +68,8 @@ try {
     git push origin prod:gh-pages
     if ($LASTEXITCODE -ne 0) { throw "Failed to push prod branch" }
 
-    # 6. Success message
-    Write-Host "[6/6] Deployment completed successfully!" -ForegroundColor Green
+    # 7. Success message
+    Write-Host "[7/7] Deployment completed successfully!" -ForegroundColor Green
     Write-Host ""
     Write-Host "✅ Site deployed to: https://scxorps.github.io/myPortfolio" -ForegroundColor Green
     Write-Host "✅ Dev branch synchronized and pushed" -ForegroundColor Green  
