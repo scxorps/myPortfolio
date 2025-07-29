@@ -38,9 +38,20 @@ try {
     # Fix absolute paths in HTML for GitHub Pages AFTER copying
     Write-Host "[5.1/6] Fixing absolute paths for GitHub Pages..." -ForegroundColor Yellow
     $htmlContent = Get-Content "index.html" -Raw
+    
+    # Replace absolute paths with relative paths (more comprehensive)
     $htmlContent = $htmlContent -replace 'href="/([^"]+)"', 'href="./$1"'
     $htmlContent = $htmlContent -replace 'src="/([^"]+)"', 'src="./$1"'
+    
+    # Make sure external URLs are not affected (keep https:// URLs as they are)
+    $htmlContent = $htmlContent -replace 'href="./https:', 'href="https:'
+    $htmlContent = $htmlContent -replace 'src="./https:', 'src="https:'
+    
+    # Fix anchor links (those starting with #)
+    $htmlContent = $htmlContent -replace 'href="./\#', 'href="#'
+    
     $htmlContent | Set-Content "index.html" -Encoding UTF8
+    Write-Host "✅ Fixed absolute paths to relative paths" -ForegroundColor Green
     Remove-Item ".nojekyll" -Force -ErrorAction SilentlyContinue
     "" | Out-File ".nojekyll" -Encoding ASCII
 
