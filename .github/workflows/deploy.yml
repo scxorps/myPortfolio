@@ -26,14 +26,25 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
+        
+    - name: Debug - List files
+      run: ls -la
         
     - name: Install dependencies
       run: npm ci
       
+    - name: Debug - Check Node and npm versions
+      run: |
+        node --version
+        npm --version
+        
     - name: Build project
       run: npm run build
+      
+    - name: Debug - List dist files
+      run: ls -la dist/
       
     - name: Setup Pages
       uses: actions/configure-pages@v4
