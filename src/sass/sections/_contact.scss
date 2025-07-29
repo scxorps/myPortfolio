@@ -35,5 +35,25 @@
         font-size: 2rem;
       }
     }
+
+    .contact-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      @include respond(phone) {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cta-btn {
+        min-width: 150px;
+      }
+    }
+
+    .fa-phone {
+      margin-right: 0.5rem;
+    }
   }
 }
