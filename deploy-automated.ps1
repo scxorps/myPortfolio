@@ -26,13 +26,6 @@ try {
     npm run build
     if ($LASTEXITCODE -ne 0) { throw "Build failed" }
 
-    # Fix absolute paths in built HTML for GitHub Pages
-    Write-Host "[4.1/6] Fixing absolute paths for GitHub Pages..." -ForegroundColor Yellow
-    $htmlContent = Get-Content "dist\index.html" -Raw
-    $htmlContent = $htmlContent -replace 'href="/([^"]+)"', 'href="./$1"'
-    $htmlContent = $htmlContent -replace 'src="/([^"]+)"', 'src="./$1"'
-    $htmlContent | Set-Content "dist\index.html" -Encoding UTF8
-
     # 5. Switch to prod and deploy
     Write-Host "[5/6] Switching to prod and deploying..." -ForegroundColor Yellow
     git checkout prod
@@ -41,6 +34,13 @@ try {
     # Copy built files
     Copy-Item "dist\*" -Destination "." -Force -ErrorAction SilentlyContinue
     Copy-Item "assets\*.mp4" -Destination "." -Force -ErrorAction SilentlyContinue
+    
+    # Fix absolute paths in HTML for GitHub Pages AFTER copying
+    Write-Host "[5.1/6] Fixing absolute paths for GitHub Pages..." -ForegroundColor Yellow
+    $htmlContent = Get-Content "index.html" -Raw
+    $htmlContent = $htmlContent -replace 'href="/([^"]+)"', 'href="./$1"'
+    $htmlContent = $htmlContent -replace 'src="/([^"]+)"', 'src="./$1"'
+    $htmlContent | Set-Content "index.html" -Encoding UTF8
     Remove-Item ".nojekyll" -Force -ErrorAction SilentlyContinue
     "" | Out-File ".nojekyll" -Encoding ASCII
 
