@@ -55,5 +55,20 @@
     .fa-phone {
       margin-right: 0.5rem;
     }
+
+    // WhatsApp button styles
+    .whatsapp-btn {
+      background-color: #25D366 !important;
+      border-color: #25D366 !important;
+      
+      &:hover {
+        background-color: #128C7E !important;
+        border-color: #128C7E !important;
+      }
+    }
+
+    .whatsapp-icon {
+      margin-right: 8px;
+    }
   }
 }
