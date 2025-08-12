@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mehadji Mohamed El Habib | Developer</title>
+    <meta name="description" content="Mehadji Mohamed El Habib | Developer">
+    <link rel="shortcut icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #02aab0;
+            --secondary-color: #00cdac;
+            --white-color: #fff;
+            --dark-grey: #333333;
+            --light-grey: #d2d2d2;
+            --dark-blue-text: #272341;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-blue-text);
+            scroll-behavior: smooth;
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .dark-mode-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--white-color);
+            border: 2px solid var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .dark-mode-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            align-items: center;
+            color: var(--white-color);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .text-color-main {
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #typewriter {
+            font-size: 2rem;
+            color: var(--white-color);
+        }
+
+        #cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Buttons */
+        .cta-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border: 2px solid var(--white-color);
+            color: var(--white-color);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin: 10px;
+        }
+
+        .cta-btn:hover {
+            background: var(--white-color);
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .cta-btn--resume {
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .cta-btn--resume:hover {
+            background: var(--secondary-color);
+            color: var(--white-color);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-blue-text);
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        /* About Section */
+        #about {
+            background: var(--white-color);
+        }
+
+        .about-wrapper__image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .about-wrapper__info-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        /* Projects Section */
+        #projects {
+            background: #f8f9fa;
+        }
+
+        .project-wrapper {
+            margin-bottom: 50px;
+        }
+
+        .project-wrapper__text {
+            padding: 30px;
+        }
+
+        .project-wrapper__text-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-blue-text);
+            margin-bottom: 20px;
+        }
+
+        .project-wrapper__image video {
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid var(--light-grey);
+        }
+
+        .project-wrapper__image video:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Video fallback for mobile */
+        @media (max-width: 768px) {
+            .project-wrapper__image video {
+                max-width: 280px !important;
+            }
+        }
+
+        /* Contact Section */
+        #contact {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white-color);
+            text-align: center;
+        }
+
+        .contact-wrapper__text {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-grey);
+            color: var(--white-color);
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .social-links a {
+            color: var(--white-color);
+            font-size: 2rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .back-to-top {
+            color: var(--white-color);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-to-top:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Dark Mode Styles */
+        [data-theme="dark"] {
+            background-color: #0d1117;
+            color: #f0f6fc;
+        }
+
+        [data-theme="dark"] #about {
+            background-color: #161b22;
+        }
+
+        [data-theme="dark"] #projects {
+            background-color: #0d1117;
+        }
+
+        [data-theme="dark"] .section-title {
+            color: #f0f6fc;
+        }
+
+        [data-theme="dark"] .project-wrapper__text-title {
+            color: #f0f6fc;
+        }
+
+        [data-theme="dark"] .about-wrapper__info-text {
+            color: #f0f6fc;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            #typewriter {
+                font-size: 1.5rem;
+            }
+            
+            .dark-mode-toggle {
+                top: 15px;
+                right: 15px;
+            }
+            
+            .dark-mode-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <button id="darkModeToggle" class="dark-mode-btn" aria-label="Toggle dark mode">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon" style="display: none;">🌙</span>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <h1 class="hero-title">
+                Hi, my name is <span class="text-color-main">Mehadji Mohamed El Habib</span>
+            </h1>
+            <h2>
+                <span id="typewriter"></span><span id="cursor">|</span>
+            </h2>
+            <p style="margin-top: 30px;">
+                <a class="cta-btn" href="#about">Know more</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">About me</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="about-wrapper__image text-center">
+                        <div style="width: 300px; 
+                                    height: 300px; 
+                                    border-radius: 50%; 
+                                    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+                                    display: flex; 
+                                    align-items: center; 
+                                    justify-content: center; 
+                                    color: white; 
+                                    font-size: 4rem; 
+                                    font-weight: bold;
+                                    margin: 0 auto;
+                                    box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                            MH
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="about-wrapper__info">
+                        <p class="about-wrapper__info-text">
+                            Hi, I'm Mehadji Mohamed El Habib — a developer who thinks in logic and builds with purpose.
+                            I enjoy breaking down complex problems, finding solutions, and turning ideas into working systems.
+                        </p>
+                        <p class="about-wrapper__info-text">
+                            Let's build something smart together.
+                        </p>
+                        <a class="cta-btn cta-btn--resume" href="assets/resume.pdf" target="_blank">
+                            View Resume
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">Projects</h2>
+            
+            <!-- Project 1: DEMIO -->
+            <div class="row project-wrapper mb-5">
+                <div class="col-lg-4">
+                    <div class="project-wrapper__text">
+                        <h3 class="project-wrapper__text-title">DEMIO</h3>
+                        <p>
+                            A smart tool for predicting and organizing the fight against tuberculosis.
+                            Demio is an AI-powered web app designed to help healthcare teams predict future TB outbreaks across regions.
+                        </p>
+                        <a class="cta-btn cta-btn--resume" href="https://github.com/scxorps/demio" target="_blank">
+                            Source Code
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="project-wrapper__image text-center">
+                        <video autoplay loop muted playsinline style="max-width: 500px; border-radius: 10px;">
+                            <source src="assets/demio-demo.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2: DAWRA -->
+            <div class="row project-wrapper mb-5">
+                <div class="col-lg-4">
+                    <div class="project-wrapper__text">
+                        <h3 class="project-wrapper__text-title">DAWRA</h3>
+                        <p>
+                            Dawra is a fresh idea of a trip app that I developed on my Flutter learning path.
+                            It presents traveling trips by categories, trips details, trips filtering and favorites section.
+                        </p>
+                        <a class="cta-btn cta-btn--resume" href="https://github.com/scxorps/dawra" target="_blank">
+                            Source Code
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="project-wrapper__image text-center">
+                        <video autoplay loop muted playsinline style="max-width: 200px; border-radius: 10px;">
+                            <source src="assets/dawra-demo.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3: WEATHERLY -->
+            <div class="row project-wrapper">
+                <div class="col-lg-4">
+                    <div class="project-wrapper__text">
+                        <h3 class="project-wrapper__text-title">WEATHERLY</h3>
+                        <p>
+                            A weather app that displays your position's weather condition, sunrise time, sunset time, max/min temp.
+                            This project showcases API integration, geolocation services, and responsive design.
+                        </p>
+                        <a class="cta-btn cta-btn--resume" href="https://github.com/scxorps/WEATHERLY" target="_blank">
+                            Source Code
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="project-wrapper__image text-center">
+                        <video autoplay loop muted playsinline style="max-width: 200px; border-radius: 10px;">
+                            <source src="assets/weatherly-demo.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact</h2>
+            <div class="contact-wrapper">
+                <p class="contact-wrapper__text">I'm always up for smart projects, cool ideas, or interesting conversations.</p>
+                <p class="contact-wrapper__text">Drop a message — let's make it happen.</p>
+                <div>
+                    <a class="cta-btn" href="mailto:mohamed79163@email.com">Email Me</a>
+                    <a class="cta-btn" href="tel:+213551997620">Call Me</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <a href="#hero" class="back-to-top">
+                <i class="fa fa-angle-up" aria-hidden="true"></i>
+            </a>
+            <div class="social-links">
+                <a href="https://wa.me/213551997620" target="_blank">
+                    <i class="fa fa-whatsapp"></i>
+                </a>
+                <a href="https://www.instagram.com/mohamed__mehadji?igsh=ZHluY2E5MmJjdzEx" target="_blank">
+                    <i class="fa fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/mohamed-mehadji-a65649179/" target="_blank">
+                    <i class="fa fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/scxorps" target="_blank">
+                    <i class="fa fa-github"></i>
+                </a>
+            </div>
+            <hr style="margin: 20px 0;">
+            <p>&copy; 2025 Mehadji Mohamed El Habib. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Typewriter Effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const typewriter = document.getElementById('typewriter');
+            const text1 = "I'm not famous";
+            const text2 = ", Just Effective";
+            let i = 0;
+
+            function typeText1() {
+                if (i < text1.length) {
+                    typewriter.textContent += text1.charAt(i);
+                    i++;
+                    setTimeout(typeText1, 120);
+                } else {
+                    setTimeout(typeText2, 2000);
+                }
+            }
+
+            function typeText2() {
+                let j = 0;
+                function type() {
+                    if (j < text2.length) {
+                        typewriter.textContent += text2.charAt(j);
+                        j++;
+                        setTimeout(type, 120);
+                    }
+                }
+                type();
+            }
+
+            typeText1();
+
+            // Dark Mode Toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+            const body = document.body;
+
+            // Check for saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.setAttribute('data-theme', 'dark');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            }
+
+            darkModeToggle.addEventListener('click', function() {
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Video autoplay handling
+            document.querySelectorAll('video').forEach(video => {
+                video.addEventListener('loadstart', function() {
+                    console.log('Loading video:', this.src);
+                });
+                
+                video.addEventListener('error', function() {
+                    console.log('Error loading video:', this.src);
+                    // Replace with placeholder if video fails to load
+                    const placeholder = document.createElement('div');
+                    placeholder.style.cssText = `
+                        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                        border-radius: 10px;
+                        padding: 40px 20px;
+                        color: white;
+                        font-size: 1.1rem;
+                        text-align: center;
+                        max-width: 200px;
+                        margin: 0 auto;
+                    `;
+                    placeholder.innerHTML = '<i class="fa fa-video-camera" style="font-size: 2rem; margin-bottom: 10px;"></i><br>Demo Video';
+                    this.parentNode.replaceChild(placeholder, this);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

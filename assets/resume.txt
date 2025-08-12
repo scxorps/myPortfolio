@@ -1,0 +1,29 @@
+MEHADJI MOHAMED EL HABIB
+Developer Resume
+
+[Ce fichier sera remplacé par votre CV réel]
+
+Contact:
+- Email: mohamed79163@email.com
+- Phone: +213551997620
+- LinkedIn: https://www.linkedin.com/in/mohamed-mehadji-a65649179/
+- GitHub: https://github.com/scxorps
+
+Skills:
+- JavaScript, TypeScript
+- React, Node.js
+- Python, Flask
+- Flutter
+- Machine Learning
+- Database Design
+
+Projects:
+- DEMIO: AI-powered TB prediction tool
+- DAWRA: Flutter travel app
+- WEATHERLY: Weather application
+
+Experience:
+[À remplir avec votre expérience]
+
+Education:
+[À remplir avec votre formation]
