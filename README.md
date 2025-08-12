@@ -16,15 +16,6 @@ Simply open `index.html` in any browser or use:
 python -m http.server 3000
 ```
 
-## Assets
-
-Make sure you have these files in the `assets/` folder:
-- `favicon.svg` (created automatically)
-- `resume.pdf` (replace resume.txt with your real PDF)
-- `demio-demo.mp4` ✅
-- `dawra-demo.mp4` ✅  
-- `weatherly-demo.mp4` ✅
-
 Note: Profile image replaced with styled placeholder for simplicity.
 
 ## Deployment
