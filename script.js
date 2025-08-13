@@ -230,7 +230,7 @@ function initScrollFlag() {
 
 // Liens ancre
 function initAnchors() {
-    $$('a[href^="#"]').forEach(a => {
+    $$('a[href^="#"]:not(.skip-link)').forEach(a => {
         a.addEventListener('click', e => {
             const id = a.getAttribute('href');
             if (!id || id === '#') return;
