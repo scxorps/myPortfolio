@@ -367,7 +367,8 @@ body.scrolled .dark-mode-toggle {
 }
 
 .text-color-main {
-    background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+    /* Toujours vert en LTR (clair et sombre) */
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -668,10 +669,21 @@ section {
 
 /* Gradient text plus visible en dark */
 [data-theme="dark"] .text-color-main {
+    /* Conserve le dégradé vert en dark également (redondant mais explicite) */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+/* Correction lisibilité arabe: éviter le clip dégradé qui peut masquer les points de ي */
+[dir="rtl"] .text-color-main {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: var(--secondary-color) !important; /* vert pur pour garder les points de ي visibles */
+    text-shadow: 0 0 0.6px rgba(0,0,0,0.25);
 }
 
 /* Scroll Reveal Animations */
