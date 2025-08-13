@@ -390,6 +390,33 @@ document.addEventListener('DOMContentLoaded', () => {
         skip.addEventListener('mouseleave', scheduleHide);
         skip.addEventListener('focus', show);
         skip.addEventListener('blur', scheduleHide);
+
+        // Comportement spécial mobile (pointer: coarse) :
+        // 1er tap => juste révéler (empêche navigation), 2e tap => navigation normale
+        const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        if (isCoarse) {
+            skip.addEventListener('click', (e) => {
+                if (!skip.classList.contains('show')) {
+                    e.preventDefault();
+                    show();
+                    // Donne un peu plus de temps sur mobile
+                    clearTimeout(hideTimer); hideTimer = setTimeout(()=> skip.classList.remove('show'), 5000);
+                } else {
+                    // Laisse le navigateur suivre l'ancre (#projects)
+                    // Optionnel: forcer scrollIntoView lisse (certaines implémentations peuvent déjà le faire)
+                    e.preventDefault();
+                    const target = document.getElementById('projects');
+                    if (target) target.scrollIntoView({behavior:'smooth'});
+                    // Après navigation on pourra masquer après un délai
+                    setTimeout(()=> skip.classList.remove('show'), 1500);
+                }
+            });
+            // Touch en dehors ferme le lien si affiché
+            document.addEventListener('touchstart', (evt)=>{
+                if (!skip.classList.contains('show')) return;
+                if (!skip.contains(evt.target)) skip.classList.remove('show');
+            }, {passive:true});
+        }
     }
 });
 
