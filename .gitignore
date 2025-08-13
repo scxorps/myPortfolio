@@ -48,6 +48,17 @@ demio-demo.*.mp4
 ehthumbs.db
 Thumbs.db
 
+# GitHub Pages
+.nojekyll
+
+# Package manager locks
+package-lock.json
+yarn.lock
+
+# Divers caches
+.cache/
+.sass-cache/
+
 # Temporary files
 *.tmp
 *.temp
