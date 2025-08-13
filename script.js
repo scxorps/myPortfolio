@@ -280,8 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAnchors();
     initVideos();
     initReveal();
-    runTypewriter($('#typewriter'), ["I'm not famous", ", Just Effective"], 120, 1800);
-    // remplacé par i18n dynamique
+    // Effet machine à écrire géré par i18n dynamique uniquement
     startTypewriter(currentLang);
     const btn = $('#darkModeToggle');
     if (btn) btn.addEventListener('click', toggleTheme);
