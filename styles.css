@@ -367,11 +367,20 @@ body.scrolled .dark-mode-toggle {
 }
 
 .text-color-main {
-    /* Toujours vert en LTR (clair et sombre) */
+    /* Toujours gradient par défaut (sera écrasé en mode clair ci-dessous) */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+/* Lisibilité renforcée en mode clair: couleur pleine cohérente pour toutes les langues */
+body:not([data-theme="dark"]) .text-color-main {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: #0f1d22 !important; /* teinte centrale du dégradé About */
+    color: #0f1d22 !important;
 }
 
 #typewriter {
