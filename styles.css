@@ -1,0 +1,715 @@
+.lang-toggle-container {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 9999;
+    direction: ltr;
+}
+[id="langToggle"] #langCode,
+#langToggle #langCode {
+    color: #000 !important;
+}
+[dir="rtl"] .lang-toggle-container { right: 22px; left: auto; }
+[dir="rtl"] .lang-toggle-container { right: 22px; left: auto; }
+/* Ajustement scroll (optionnel si on veut rapprocher un peu) */
+body.scrolled .lang-toggle-container { bottom: 18px; right: 18px; }
+/* Language bubbles menu */
+.lang-bubbles { position: relative; }
+.lang-btn.lang-btn-active { box-shadow: 0 0 0 3px rgba(0,205,172,0.4); }
+.lang-options {
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--lang-gap);
+    pointer-events: none;
+    /* bottom = taille du bouton principal + espacement spécial première bulle */
+    bottom: calc(var(--lang-bubble-size) + var(--lang-first-gap));
+}
+.lang-option {
+    width: var(--lang-bubble-size);
+    height: var(--lang-bubble-size);
+    font-size: var(--lang-button-font-size, 24px); /* même taille que bouton principal */
+    font-weight: var(--lang-bubble-font-weight, 500);
+    opacity: 0;
+    transform: translateY(10px) scale(.6);
+    transition: opacity .35s var(--theme-ease), transform .55s var(--theme-ease);
+    background: linear-gradient(145deg, var(--toggle-bg-light), rgba(255,255,255,.65));
+    color: #000 !important;
+}
+.lang-option.hidden { display: none !important; }
+[data-theme="dark"] .lang-option { background: linear-gradient(145deg, var(--toggle-bg-dark), rgba(10,15,20,.75)); color: #fff !important; }
+.lang-bubbles.open .lang-option,
+.lang-bubbles:focus-within .lang-option { pointer-events: auto; opacity: 1; transform: translateY(0) scale(1); }
+/* Les délais sont désormais injectés dynamiquement via JS selon l'ordre des bulles visibles */
+.lang-code {
+    font-size: var(--lang-button-font-size, 24px);
+    font-weight: var(--lang-bubble-font-weight, 500);
+    letter-spacing: var(--lang-button-letter-spacing, 0.5px);
+    text-transform: uppercase;
+    color:#000;
+}
+[data-theme="dark"] .lang-code { color:#fff; }
+.lang-btn:hover { transform: scale(1.06); }
+:root {
+    --primary-color: #02aab0;
+    --secondary-color: #00cdac;
+    --white-color: #fff;
+    --dark-grey: #333333;
+    --light-grey: #d2d2d2;
+    --dark-blue-text: #272341;
+    --focus-ring: 0 0 0 3px rgba(0,205,172,0.45);
+    /* Bouton toggle (valeurs accessibles) */
+    /* Fonds translucides (augmenter la transparence) */
+    --toggle-bg-light: rgba(255,255,255,0.85); /* moins transparent */
+    --toggle-bg-dark: rgba(22,27,34,0.82); /* moins transparent */
+    --toggle-border-light: #000; /* bord noir en mode clair */
+    --toggle-border-dark: var(--secondary-color);
+    --toggle-icon-light: #0d1117;
+    --toggle-icon-dark: #f8fafc;
+    --toggle-halo: 0 0 0 2px rgba(0,0,0,0.10), 0 4px 14px rgba(0,0,0,0.25), 0 0 0 6px rgba(255,255,255,0.25);
+    --sun-color: #ffb347; /* orange clair */
+    --sun-color-dark: #ff9900; /* orange plus saturé en dark */
+    /* Transition de thème (toutes propriétés synchro) */
+    --theme-transition-duration: .5s; /* durée unique */
+    --theme-ease: cubic-bezier(.45,0,.15,1);
+    /* Couleur fond projets (clair) légèrement plus grise */
+    --projects-bg-light: #f1f3f5;
+    /* Lang bubbles layout */
+    /* Taille réduite des bulles/lang button */
+    --lang-bubble-size: 36px;
+    --lang-gap: 14px; /* espacement entre bulles (réduit proportionnellement) */
+    --lang-first-gap: 20px; /* espacement entre bouton principal et 1ère bulle */
+    --lang-button-font-size: 14px; /* taille unifiée (bouton + bulles) */
+    --lang-bubble-font-weight: 500; /* poids texte bulles */
+    --lang-button-font-weight: 500; /* poids texte unifié */
+    --lang-button-letter-spacing: 0.5px; /* style texte unifié */
+}
+
+/* Assure cohérence taille texte entre bouton et bulles */
+#langMain, .lang-option {
+    font-size: var(--lang-button-font-size);
+    font-weight: var(--lang-button-font-weight);
+    letter-spacing: var(--lang-button-letter-spacing);
+    font-family: inherit;
+    text-transform: uppercase;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-blue-text);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition: background-color var(--theme-transition-duration) var(--theme-ease),
+               color var(--theme-transition-duration) var(--theme-ease),
+               border-color var(--theme-transition-duration) var(--theme-ease),
+               box-shadow var(--theme-transition-duration) var(--theme-ease);
+}
+#hero, #about, #projects, #contact, .project-wrapper, .footer {
+    transition: background var(--theme-transition-duration) var(--theme-ease),
+               background-color var(--theme-transition-duration) var(--theme-ease),
+               color var(--theme-transition-duration) var(--theme-ease),
+               border-color var(--theme-transition-duration) var(--theme-ease),
+               box-shadow var(--theme-transition-duration) var(--theme-ease);
+    will-change: background-color, color, box-shadow;
+}
+
+/* Transition globale temporaire (ajoutée lors du toggle) */
+/* Classe temporaire appliquée lors du basculement pour forcer une transition harmonisée */
+.theme-transition * {
+    transition: background-color var(--theme-transition-duration) var(--theme-ease),
+               color var(--theme-transition-duration) var(--theme-ease),
+               border-color var(--theme-transition-duration) var(--theme-ease),
+               box-shadow var(--theme-transition-duration) var(--theme-ease) !important;
+    will-change: background-color, color, border-color, box-shadow;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body, #hero, #about, #projects, #contact, .project-wrapper, .footer, .theme-transition * { transition: none !important; }
+}
+
+/* Indiquer aux UA que les deux thèmes sont supportés */
+:root, [data-theme="dark"] {
+    color-scheme: light dark;
+}
+
+/* Lien d'évitement accessibilité */
+.skip-link {
+    position: absolute;
+    left: 16px;
+    top: -36px; /* partiellement masqué */
+    color: #fff;
+    padding: 14px 26px;
+    z-index: 10000;
+    border-radius: 0 0 12px 12px;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: .55px;
+    font-size: 0.95rem;
+    transition: top .30s ease, box-shadow .4s ease;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+    backdrop-filter: blur(2px);
+    overflow: hidden;
+    position: absolute;
+    background: linear-gradient(135deg, #0d1117 0%, #131a20 45%, #161b22 100%); /* base (light mode) */
+    line-height: 1.1;
+}
+.skip-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    opacity: 0;
+    transition: opacity var(--theme-transition-duration) var(--theme-ease);
+    pointer-events: none;
+    z-index: -1; /* derrière le texte */
+}
+.skip-link span { position: relative; z-index: 1; }
+.skip-link:hover,
+.skip-link:focus,
+.skip-link:focus-visible,
+.skip-link.show { top:0; }
+[data-theme="dark"] .skip-link::after { opacity: 1; }
+[data-theme="dark"] .skip-link { box-shadow: 0 6px 16px rgba(0,0,0,0.45); }
+
+/* Focus visible modernisé */
+button:focus-visible, a:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: 6px; }
+
+/* Réduction des animations si prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1 !important; transform: none !important; }
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;               /* ancrage principal côté droit */
+    left: auto;                 /* verrou à droite (physique) */
+    z-index: 9999;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    transform: translateZ(0);
+    will-change: transform;
+    direction: ltr; /* conserve l'ordre des boutons quelle que soit la langue globale */
+}
+
+/* espacement entre les boutons (lang à droite du thème) */
+.dark-mode-toggle #langToggle { margin-left: 10px; }
+
+/* Ne pas inverser en RTL : forcer toujours à droite */
+/* RTL: aucune modification, on conserve la position physique */
+
+.dark-mode-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--toggle-bg-light), rgba(255,255,255,0.65));
+    backdrop-filter: blur(12px) saturate(180%) contrast(105%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%) contrast(105%);
+    border: 2px solid var(--toggle-border-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px; /* valeur par défaut (sera neutralisée pour les bulles) */
+    transition: all 0.3s ease;
+    box-shadow: var(--toggle-halo);
+    padding: 0;
+    margin: 0;
+    position: relative;
+    outline: none;
+}
+/* Boutons principaux: appliquer variables (dark mode conserve 24px, langues réduites) */
+#langMain {
+    width: var(--lang-bubble-size);
+    height: var(--lang-bubble-size);
+    font-size: var(--lang-button-font-size);
+}
+
+/* Renforcer la taille des bulles après la déclaration .dark-mode-btn */
+.lang-option {
+    width: var(--lang-bubble-size);
+    height: var(--lang-bubble-size);
+    font-size: var(--lang-button-font-size);
+}
+
+.dark-mode-btn::after { /* halo interne pour détacher sur fonds clairs ou dégradés */
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgba(255,255,255,0.35), rgba(255,255,255,0));
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+/* Hover light: conserver la bordure noire */
+/* Light mode: retirer halo néon => ombre douce only */
+body:not([data-theme="dark"]) .dark-mode-btn { box-shadow: 0 2px 6px rgba(0,0,0,0.22); }
+body:not([data-theme="dark"]) .dark-mode-btn:hover {
+    transform: translateY(-2px) scale(1.07);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+    border-color: #000;
+}
+/* Hover dark: garder accent secondaire */
+[data-theme="dark"] .dark-mode-btn:hover {
+    transform: translateY(-2px) scale(1.07);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.06), 0 6px 22px rgba(0,0,0,0.55), 0 0 0 8px rgba(0,205,172,0.20);
+    border-color: var(--secondary-color);
+}
+
+.sun-icon, .moon-icon {
+    font-size: 24px;
+    display: inline-flex;
+    transition: transform .6s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity .3s ease;
+}
+
+/* Couleurs spécifiques icônes */
+.sun-icon { color: var(--sun-color); }
+.moon-icon { color: var(--toggle-icon-light); }
+
+.sun-icon:hover, .moon-icon:hover {
+    transform: rotate(360deg);
+}
+
+/* Adjusting the button on scroll */
+body.scrolled .dark-mode-toggle {
+    top: 15px;
+    right: 15px;
+    inset-inline-end: 15px; /* cohérence RTL */
+}
+
+[data-theme="dark"] .dark-mode-btn {
+    background: linear-gradient(145deg, var(--toggle-bg-dark), rgba(10,15,20,0.75));
+    border-color: var(--toggle-border-dark);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.06), 0 4px 14px rgba(0,0,0,0.55), 0 0 0 6px rgba(0,205,172,0.15);
+}
+
+[data-theme="dark"] .dark-mode-btn::after {
+    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
+}
+
+[data-theme="dark"] .sun-icon { color: var(--sun-color-dark); }
+[data-theme="dark"] .moon-icon { color: var(--toggle-icon-dark); }
+
+/* Hero Section */
+#hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    display: flex;
+    align-items: center;
+    color: var(--white-color);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate; /* permet de placer un calque dark derrière le contenu */
+}
+
+/* Calque fondu dark pour hero */
+#hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0d1117 0%, #131a20 45%, #161b22 100%);
+    opacity: 0;
+    transition: opacity var(--theme-transition-duration) var(--theme-ease);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.text-color-main {
+    background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#typewriter {
+    font-size: 2rem;
+    color: var(--white-color);
+}
+
+#cursor {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Buttons */
+.cta-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    border: 2px solid var(--white-color);
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    margin: 10px;
+}
+
+.cta-btn:hover {
+    background: var(--white-color);
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.cta-btn--resume {
+    background: transparent;
+    border: 2px solid var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.cta-btn--resume:hover {
+    background: var(--secondary-color);
+    color: var(--white-color);
+}
+
+/* Sections */
+section {
+    padding: 80px 0;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark-blue-text);
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+/* About Section */
+#about {
+    background: var(--white-color);
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 0;
+    padding-top: 80px;
+    overflow: hidden;
+    isolation: isolate;
+}
+/* Calque fondu dark pour about */
+#about::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #161b22 0%, #0f1d22 45%, #043c40 100%);
+    opacity: 0;
+    transition: opacity var(--theme-transition-duration) var(--theme-ease);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.about-wrapper__image img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.about-wrapper__info-text {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+/* Projects Section */
+#projects {
+    background: var(--projects-bg-light);
+    position: relative;
+}
+
+/* Chaque projet prend toute la hauteur de la fenêtre */
+.project-wrapper {
+    min-height: 100vh;
+    padding: 80px 0; /* marge interne confortable */
+    margin: 0; /* supprimer l'espacement externe pour enchaîner plein écran */
+    align-items: center; /* vertical align for bootstrap row */
+}
+
+/* Séparations entre projets */
+/* Séparateur entre projets en plein écran */
+.project-wrapper + .project-wrapper {
+    position: relative;
+}
+.project-wrapper + .project-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0; /* ligne en haut du bloc suivant */
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg,
+        var(--primary-color) 0%,
+        var(--secondary-color) 25%,
+        var(--primary-color) 50%,
+        var(--secondary-color) 75%,
+        var(--primary-color) 100%);
+    background-size: 300% 100%;
+    animation: proj-separator-move 4s linear infinite;
+    opacity: 0.55;
+    border-radius: 3px;
+    pointer-events: none;
+    box-shadow: 0 0 6px rgba(0,205,172,0.25);
+}
+
+/* Variante dark: un peu plus lumineuse */
+[data-theme="dark"] .project-wrapper + .project-wrapper::before {
+        opacity: 0.85;
+        filter: brightness(1.2) saturate(1.15);
+        box-shadow: 0 0 10px rgba(0,205,172,0.45), 0 0 20px rgba(0,205,172,0.25);
+}
+
+@keyframes proj-separator-move {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .project-wrapper + .project-wrapper::before { animation: none; background-size: 100% 100%; }
+}
+
+.project-wrapper__text {
+    padding: 30px;
+}
+
+.project-wrapper__text-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-blue-text);
+    margin-bottom: 20px;
+}
+
+.project-wrapper__image video {
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid var(--light-grey);
+}
+
+.project-wrapper__image video:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Video fallback for mobile */
+@media (max-width: 768px) {
+    .project-wrapper__image video {
+        max-width: 280px !important;
+    }
+}
+
+/* Contact Section */
+#contact {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--white-color);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate; /* crée un contexte pour gérer z-index négatif du calque */
+}
+/* Calque de fondu pour gradient dark */
+#contact::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, #0d1117 0%, #0f1d22 45%, #043c40 100%);
+    opacity: 0;
+    transition: opacity var(--theme-transition-duration) var(--theme-ease);
+    z-index: -1; /* derrière le contenu */
+}
+
+.contact-wrapper__text {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+/* Footer */
+.footer {
+    background: var(--dark-grey);
+    color: var(--white-color);
+    text-align: center;
+    padding: 40px 0;
+}
+
+.social-links a {
+    color: var(--white-color);
+    font-size: 2rem;
+    margin: 0 15px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.back-to-top {
+    color: var(--white-color);
+    font-size: 2rem;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.back-to-top:hover {
+    color: var(--secondary-color);
+}
+
+/* Dark Mode Styles */
+[data-theme="dark"] {
+    background-color: #0d1117;
+    color: #f0f6fc;
+}
+
+[data-theme="dark"] body {
+    color: #f0f6fc;
+}
+
+[data-theme="dark"] #about {
+    color: #e6f1f5;
+    margin-top: 0;
+    padding-top: 80px;
+}
+
+[data-theme="dark"] #projects {
+    background-color: #0d1117;
+}
+
+[data-theme="dark"] .section-title {
+    color: #f0f6fc;
+}
+
+[data-theme="dark"] .project-wrapper__text-title {
+    color: #f0f6fc;
+}
+
+[data-theme="dark"] .about-wrapper__info-text {
+    color: #f0f6fc;
+}
+
+/* Dark variants for hero & contact */
+[data-theme="dark"] #hero { color: #f0f6fc; }
+[data-theme="dark"] #hero::after { opacity: 1; }
+[data-theme="dark"] #about::after { opacity: 1; }
+
+[data-theme="dark"] #contact { color: var(--white-color); }
+[data-theme="dark"] #contact::after { opacity: 1; }
+
+/* Forcer texte contact toujours blanc (titres inclus) */
+#contact, [data-theme="dark"] #contact { color: var(--white-color); }
+#contact .section-title, [data-theme="dark"] #contact .section-title { color: var(--white-color); }
+
+/* Accentuer le contraste des boutons en dark */
+[data-theme="dark"] .cta-btn {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+[data-theme="dark"] .cta-btn:hover {
+    background: var(--secondary-color);
+    color: #fff;
+}
+
+/* Gradient text plus visible en dark */
+[data-theme="dark"] .text-color-main {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Scroll Reveal Animations */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s ease;
+}
+
+.reveal-left.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s ease;
+}
+
+.reveal-right.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.8s ease;
+}
+
+.reveal-scale.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    #typewriter {
+        font-size: 1.5rem;
+    }
+    
+    .dark-mode-toggle {
+        top: 10px;
+        right: 10px;
+        inset-inline-end: 10px;
+        left: auto !important;
+        position: fixed !important;
+    }
+    
+    /* Ne pas impacter les bulles/lang button: cibler uniquement le bouton thème */
+    #darkModeToggle.dark-mode-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+        box-shadow: var(--toggle-halo);
+    }
+    /* Réduction du padding projets sur mobile pour éviter trop de scroll */
+    .project-wrapper { min-height: auto; padding: 60px 0; }
+}

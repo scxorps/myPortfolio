@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "private": "true",
   "description": "Portfolio personnel de Mehadji Mohamed El Habib - Développeur Full Stack",
-  "source": "src/index.html",
+  "source": "index.html",
   "scripts": {
     "start": "parcel --port 4000 --no-cache --no-source-maps --host localhost",
     "dev": "parcel --port 4000 --no-cache --hmr-port 4001",
