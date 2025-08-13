@@ -267,6 +267,40 @@ body:not([data-theme="dark"]) .dark-mode-btn:hover {
     border-color: var(--secondary-color);
 }
 
+/* Neutraliser le hover/active/focus-visible du bouton langues quand suppress-hover est actif (après fermeture) */
+#langMain.suppress-hover,
+#langMain.suppress-hover:hover,
+#langMain.suppress-hover:active,
+#langMain.suppress-hover:focus,
+#langMain.suppress-hover:focus-visible { transform: none !important; }
+/* idem pour le bouton d’en-tête si utilisé pour les langues sur mobile */
+#langToggle.suppress-hover,
+#langToggle.suppress-hover:hover,
+#langToggle.suppress-hover:active,
+#langToggle.suppress-hover:focus,
+#langToggle.suppress-hover:focus-visible { transform: none !important; }
+/* Appliquer la même neutralisation au bouton d’en-tête si utilisé pour les langues sur mobile */
+#langToggle.suppress-hover:hover,
+#langToggle.suppress-hover:active { transform: none !important; }
+
+/* Forcer le même halo/bordure que l'état normal (non-hover) quand suppress-hover est actif */
+/* Light mode: ombre douce, bordure noire, aucune mise à l’échelle */
+body:not([data-theme="dark"]) .dark-mode-btn.suppress-hover,
+body:not([data-theme="dark"]) .dark-mode-btn.suppress-hover:hover,
+body:not([data-theme="dark"]) .dark-mode-btn.suppress-hover:active {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.22) !important;
+    border-color: #000 !important;
+    transform: none !important;
+}
+/* Dark mode: halo discret par défaut, bordure accent secondaire, aucune mise à l’échelle */
+[data-theme="dark"] .dark-mode-btn.suppress-hover,
+[data-theme="dark"] .dark-mode-btn.suppress-hover:hover,
+[data-theme="dark"] .dark-mode-btn.suppress-hover:active {
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.06), 0 4px 14px rgba(0,0,0,0.55), 0 0 0 6px rgba(0,205,172,0.15) !important;
+    border-color: var(--toggle-border-dark) !important;
+    transform: none !important;
+}
+
 .sun-icon, .moon-icon {
     font-size: 24px;
     display: inline-flex;

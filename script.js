@@ -24,6 +24,15 @@ function runTypewriter(el, segments, speed=120, pause=1800) {
     step();
 }
 
+// Tracker d'état du bouton "See projects"
+function isSeeProjectsOpen(){
+    const el = document.querySelector('.skip-link');
+    return !!(el && el.classList.contains('show'));
+}
+function emitSeeProjectsState(open){
+    try { document.dispatchEvent(new CustomEvent('skiplink:state', { detail: { open } })); } catch(_) {}
+}
+
 // Thème
 // =============================
 // Internationalisation simple (EN / FR / AR)
@@ -139,6 +148,17 @@ function startTypewriter(lang){
     })();
 }
 function applyLang(lang){
+    // Ancre scroll au centre du viewport pour conserver strictement la position
+    const cx = Math.floor(window.innerWidth/2);
+    const cy = Math.floor(window.innerHeight/2);
+    let anchor = document.elementFromPoint(cx, cy);
+    while (anchor && (anchor === document.body || anchor === document.documentElement)) anchor = anchor.parentElement;
+    const anchorTop = anchor ? anchor.getBoundingClientRect().top : null;
+    const prevDocSb = document.documentElement.style.scrollBehavior;
+    const prevBodySb = document.body.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    document.body.style.scrollBehavior = 'auto';
+
     const dict = I18N[lang] || I18N.en;
     document.documentElement.setAttribute('lang', lang);
     // Direction RTL pour l'arabe
@@ -170,11 +190,27 @@ function applyLang(lang){
     try {
         const root = document.querySelector('.lang-bubbles.open .lang-options');
         if(root){
-            // On déclenche un event custom que l'init écoute éventuellement
             document.dispatchEvent(new CustomEvent('langOptionsChanged'));
         }
-    } catch(_){}
+    } catch(_){ }
     startTypewriter(lang);
+
+    // Corrections de scroll (immédiate + différées) pour compenser les reflows
+    const correct = ()=>{
+        if(!anchor || anchorTop == null) return;
+        const newTop = anchor.getBoundingClientRect().top;
+        const delta = newTop - anchorTop;
+        if (delta) window.scrollBy({ top: delta, behavior: 'auto' });
+    };
+    requestAnimationFrame(()=>{
+        correct();
+        setTimeout(correct, 70);
+        setTimeout(correct, 160);
+        setTimeout(()=>{
+            document.documentElement.style.scrollBehavior = prevDocSb || '';
+            document.body.style.scrollBehavior = prevBodySb || '';
+        }, 200);
+    });
 }
 function cycleLang(){
     const order = ['en','fr','ar'];
@@ -285,8 +321,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = $('#darkModeToggle');
     if (btn) btn.addEventListener('click', toggleTheme);
     const langBtn = $('#langToggle');
-    if (langBtn) langBtn.addEventListener('click', cycleLang);
-    else document.addEventListener('click', (e)=>{ if(e.target && e.target.id==='langToggle') cycleLang(); });
+    const __hoverDesktop = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (langBtn && __hoverDesktop) langBtn.addEventListener('click', cycleLang);
+    else if (!__hoverDesktop && langBtn) {
+        // sur mobile: ce bouton n’alterne pas la langue, il ouvre/ferme les bulles (géré plus bas si présent)
+    } else {
+        document.addEventListener('click', (e)=>{ if(e.target && e.target.id==='langToggle' && __hoverDesktop) cycleLang(); });
+    }
 
     // Nouveau menu bulles de langue
     const mainLangBtn = $('#langMain');
@@ -294,6 +335,60 @@ document.addEventListener('DOMContentLoaded', () => {
     if(mainLangBtn && optionsWrap){
         let closeTimer;
         const root = optionsWrap.closest('.lang-bubbles');
+        const hoverCapable = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        const touchLike = ('ontouchstart' in window) || (navigator.maxTouchPoints>0) || (navigator.msMaxTouchPoints>0);
+    // Reset visuel du bouton: ramène taille/halo/bordure à l'état normal et neutralise le hover jusqu'à sortie du pointeur
+        const resetBtnVisual = (btn)=>{
+            if(!btn) return;
+            // Supprime un éventuel état actif personnalisé
+            btn.classList.remove('lang-btn-active');
+            // Neutralise hover/active pour éviter l'effet zoom/halo résiduel
+            btn.classList.add('suppress-hover');
+            try { btn.blur(); } catch(_) {}
+            // Forcer immédiatement un transform neutre (sécurité, en plus du CSS)
+            btn.style.transform = 'none';
+            // Désactive brièvement la transition pour éviter un flash
+            const prev = btn.style.transition;
+            btn.style.transition = 'none';
+            // Reflow
+            void btn.offsetHeight;
+            btn.style.transition = prev;
+            // En desktop, ne réactive le hover qu'après sortie du pointeur
+            const onLeave = ()=>{ btn.classList.remove('suppress-hover'); btn.removeEventListener('mouseleave', onLeave); };
+            btn.addEventListener('mouseleave', onLeave, { once:true });
+            // En environnement tactile: retirer suppress-hover seulement au prochain touchstart en dehors du bouton (évite :hover sticky)
+            if (!hoverCapable) {
+                const onTouchStart = (ev)=>{
+                    if (!btn.contains(ev.target)) {
+                        btn.classList.remove('suppress-hover');
+                        document.removeEventListener('touchstart', onTouchStart, true);
+                    }
+                };
+                document.addEventListener('touchstart', onTouchStart, true);
+            }
+        };
+    // Autoriser à nouveau le “shine” (retire suppress-hover) juste avant une nouvelle ouverture
+    const allowShine = (btn)=>{ if(!btn) return; btn.classList.remove('suppress-hover'); btn.style.transform=''; };
+        // Gestion du clic/tap extérieur (mobile & desktop) pour fermer
+        let outsideAttached = false;
+        const onOutside = (evt)=>{
+            if(!root.classList.contains('open')) return;
+            const t = evt.target;
+            if (root.contains(t) || (mainLangBtn && mainLangBtn.contains(t))) return;
+            immediateClose();
+        };
+        const attachOutside = ()=>{
+            if(outsideAttached) return;
+            document.addEventListener('click', onOutside, true);
+            if(touchLike) document.addEventListener('touchstart', onOutside, { passive:true });
+            outsideAttached = true;
+        };
+        const detachOutside = ()=>{
+            if(!outsideAttached) return;
+            document.removeEventListener('click', onOutside, true);
+            if(touchLike) document.removeEventListener('touchstart', onOutside);
+            outsideAttached = false;
+        };
         // Calcule et applique des délais séquentiels uniquement sur les bulles visibles (non .hidden)
         const applySequentialDelays = ()=>{
             const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -315,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
         const clearDelays = ()=>{ $$('.lang-option', optionsWrap).forEach(b=>{ b.style.transitionDelay=''; }); };
-        const openMenu = ()=>{ if(root){ applySequentialDelays(); root.classList.add('open'); mainLangBtn.setAttribute('aria-expanded','true'); } };
+        const openMenu = ()=>{ if(root){ applySequentialDelays(); root.classList.add('open'); mainLangBtn.setAttribute('aria-expanded','true'); attachOutside(); } };
         const scheduleClose = ()=>{
             clearTimeout(closeTimer);
             // Fermeture après 1s sans survol ni focus
@@ -330,7 +425,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     applyClosingDelays();
                     root.classList.add('closing');
                     // Retire la classe open pour déclencher l'opacité 1->0 après un tick
-                    requestAnimationFrame(()=>{ root.classList.remove('open'); mainLangBtn.setAttribute('aria-expanded','false'); });
+                    requestAnimationFrame(()=>{
+                        root.classList.remove('open');
+                        mainLangBtn.setAttribute('aria-expanded','false');
+                        detachOutside();
+                        // Reset visuel strictement identique au clic extérieur
+                        resetBtnVisual(mainLangBtn);
+                        const headerToggle = document.getElementById('langToggle');
+                        if (headerToggle) resetBtnVisual(headerToggle);
+                    });
                     // Nettoyage après durée max (delai dernier + transition .35s)
                     const visibles = $$('.lang-option:not(.hidden)', optionsWrap).length;
                     const maxDelay = (visibles-1)*0.12 + 0.35; // s
@@ -338,14 +441,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, 200);
         };
-        const immediateClose = ()=>{ clearTimeout(closeTimer); if(root){ root.classList.remove('open'); mainLangBtn.setAttribute('aria-expanded','false'); } };
+        const immediateClose = ()=>{
+            clearTimeout(closeTimer);
+            if(root){
+                // Fermeture en cascade top -> bas
+                applyClosingDelays();
+                root.classList.add('closing');
+                requestAnimationFrame(()=>{
+                    root.classList.remove('open');
+                    mainLangBtn.setAttribute('aria-expanded','false');
+                    detachOutside();
+                    // Reset visuel strict: 2e clic = clic extérieur
+                    resetBtnVisual(mainLangBtn);
+                    const headerToggle = document.getElementById('langToggle');
+                    if (headerToggle) resetBtnVisual(headerToggle);
+                });
+                const visibles = $$('.lang-option:not(.hidden)', optionsWrap).length;
+                const maxDelay = (visibles-1)*0.12 + 0.35;
+                setTimeout(()=>{ root.classList.remove('closing'); clearDelays(); }, Math.ceil((maxDelay+0.15)*1000));
+            }
+        };
 
     const cancelClose = ()=>{ clearTimeout(closeTimer); };
-    root.addEventListener('mouseenter', ()=>{ cancelClose(); openMenu(); });
-    root.addEventListener('mouseleave', ()=>{ scheduleClose(); });
-    // Survol des bulles (délégation) pour empêcher fermeture
-    optionsWrap.addEventListener('mouseenter', cancelClose, true);
-    optionsWrap.addEventListener('mouseleave', ()=>{ scheduleClose(); }, true);
+    if (hoverCapable) {
+        root.addEventListener('mouseenter', ()=>{ cancelClose(); openMenu(); });
+        root.addEventListener('mouseleave', ()=>{ scheduleClose(); });
+        // Survol des bulles (délégation) pour empêcher fermeture
+        optionsWrap.addEventListener('mouseenter', cancelClose, true);
+        optionsWrap.addEventListener('mouseleave', ()=>{ scheduleClose(); }, true);
+    }
     // Focus clavier dans une option garde ouvert
     root.addEventListener('focusin', ()=>{ cancelClose(); openMenu(); });
     root.addEventListener('focusout', ()=>{ scheduleClose(); });
@@ -366,8 +490,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // ouvrir sur focus clavier
         mainLangBtn.addEventListener('focus', openMenu);
         mainLangBtn.addEventListener('blur', scheduleClose);
-        // clic bouton principal: toggle manuel
-        mainLangBtn.addEventListener('click', (e)=>{ e.preventDefault(); if(root.classList.contains('open')) immediateClose(); else openMenu(); });
+    // clic bouton principal: toggle (mobile/desktop)
+    // Permettre le shine si on est en train d'ouvrir (3e clic et suivants)
+    mainLangBtn.addEventListener('pointerdown', ()=>{ if(!root.classList.contains('open')) { allowShine(mainLangBtn); const headerToggle = document.getElementById('langToggle'); if(headerToggle) allowShine(headerToggle); } });
+    mainLangBtn.addEventListener('click', (e)=>{
+            e.preventDefault();
+            if(root.classList.contains('open')) immediateClose(); else openMenu();
+        });
+        // sur mobile, #langToggle agit aussi comme toggle d’ouverture/fermeture
+        if (!hoverCapable) {
+            const headerToggle = document.getElementById('langToggle');
+            if (headerToggle) {
+                // Permettre le shine si on ouvre via le bouton d'en-tête (mobile)
+                headerToggle.addEventListener('pointerdown', ()=>{ if(!root.classList.contains('open')) { allowShine(headerToggle); allowShine(mainLangBtn); } });
+                headerToggle.addEventListener('click', (e)=>{ e.preventDefault(); if(root.classList.contains('open')) immediateClose(); else openMenu(); });
+            }
+        }
         // Accessibilité clavier: Enter/Espace ouvre et Tab circule
         mainLangBtn.addEventListener('keydown', e=>{
             if(['Enter',' '].includes(e.key)){
@@ -383,35 +521,138 @@ document.addEventListener('DOMContentLoaded', () => {
     const skip = document.querySelector('.skip-link');
     if (skip) {
         let hideTimer;
-        const show = () => { clearTimeout(hideTimer); skip.classList.add('show'); };
-        const scheduleHide = () => { clearTimeout(hideTimer); hideTimer = setTimeout(()=> skip.classList.remove('show'), 3000); };
-        skip.addEventListener('mouseenter', show);
-        skip.addEventListener('mouseleave', scheduleHide);
-        skip.addEventListener('focus', show);
-        skip.addEventListener('blur', scheduleHide);
+    let openedFully = false; // vrai uniquement quand l'ouverture est terminée
+    let tapCount = 0; // compteur de taps (mobile)
+    let lastOpenedAt = 0; // timestamp de l'ouverture
+        const OPEN_FALLBACK_MS = 350; // repli si pas d'événement CSS
+    const SECOND_TAP_MIN_DELAY = 250; // ms avant d'accepter le 2e tap (anti double-clic synthétique)
+        const show = () => {
+            clearTimeout(hideTimer);
+            if(!skip.classList.contains('show')){
+                skip.classList.add('show');
+                emitSeeProjectsState(true);
+                // Marque comme non encore totalement ouvert
+                openedFully = false;
+        lastOpenedAt = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+                let done = false;
+                const onEnd = (ev)=>{
+                    if(done) return;
+                    // Valide si on est toujours en état "show"
+                    if(skip.classList.contains('show')){
+                        openedFully = true;
+                    }
+                    done = true;
+                    skip.removeEventListener('transitionend', onEnd);
+                };
+                // Écoute l'animation/transition d'ouverture; repli par timeout
+                try { skip.addEventListener('transitionend', onEnd, { once:false }); } catch(_) {}
+                setTimeout(()=> onEnd(), OPEN_FALLBACK_MS);
+            }
+        };
+        const scheduleHide = () => {
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(()=> {
+                if(skip.classList.contains('show')){
+                    skip.classList.remove('show');
+                    emitSeeProjectsState(false);
+                    openedFully = false;
+                    tapCount = 0;
+            lastOpenedAt = 0;
+                }
+            }, 3000);
+        };
+        const isHoverCapable = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        if (isHoverCapable) {
+            // Desktop: survol/blur ouvrent/ferment avec un petit délai
+            skip.addEventListener('mouseenter', show);
+            skip.addEventListener('mouseleave', () => {
+                // fermeture douce en 200ms
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(()=>{
+                    if(skip.classList.contains('show')){
+                        skip.classList.remove('show');
+                        emitSeeProjectsState(false);
+                        openedFully = false;
+                        tapCount = 0;
+                        lastOpenedAt = 0;
+                    }
+                }, 200);
+            });
+            skip.addEventListener('focus', show);
+            skip.addEventListener('blur', () => {
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(()=>{
+                    if(skip.classList.contains('show')){
+                        skip.classList.remove('show');
+                        emitSeeProjectsState(false);
+                        openedFully = false;
+                        tapCount = 0;
+                        lastOpenedAt = 0;
+                    }
+                }, 200);
+            });
+        }
 
         // Comportement spécial appareils tactiles : 1er tap révèle, 2e tap scrolle
         const isTouchCapable = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
         if (isTouchCapable) {
+            const EXTRA_SCROLL_OFFSET_MOBILE = 80; // px: aller un peu plus bas que le début de section
             skip.addEventListener('click', (e) => {
-                if (!skip.classList.contains('show')) {
+        if (!skip.classList.contains('show')) {
                     e.preventDefault();
                     show();
+            tapCount = 1; // 1er tap
                     clearTimeout(hideTimer);
-                    hideTimer = setTimeout(()=> skip.classList.remove('show'), 5000);
+                    hideTimer = setTimeout(()=> {
+                        if(skip.classList.contains('show')){
+                            skip.classList.remove('show');
+                            emitSeeProjectsState(false);
+                            openedFully = false;
+                tapCount = 0;
+                            lastOpenedAt = 0;
+                        }
+                    }, 5000);
                     return;
                 }
-                // 2e tap: scroll manuel et empêcher le saut d'ancre par défaut
+                // 2e tap: ne scrolle que si complètement ouvert
                 e.preventDefault();
+                // Anti double-clic synthétique juste après l'ouverture
+                const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+                if (nowTs - (lastOpenedAt || 0) < SECOND_TAP_MIN_DELAY) {
+                    return;
+                }
+                if (!openedFully) {
+                    // Ignore le tap tant que l'ouverture n'est pas finie
+                    return;
+                }
+                if (tapCount < 1) { tapCount = 1; return; }
                 const target = document.getElementById('projects');
-                if (target) target.scrollIntoView({behavior:'smooth'});
-                setTimeout(()=> skip.classList.remove('show'), 1500);
+                if (target) {
+                    const rect = target.getBoundingClientRect();
+                    const y = rect.top + window.pageYOffset + EXTRA_SCROLL_OFFSET_MOBILE;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+                setTimeout(()=> {
+                    if(skip.classList.contains('show')){
+                        skip.classList.remove('show');
+                        emitSeeProjectsState(false);
+                        openedFully = false;
+            tapCount = 0;
+                        lastOpenedAt = 0;
+                    }
+                }, 1500);
             }, { passive: false });
 
             // Touch en dehors ferme le lien si affiché
-            document.addEventListener('touchstart', (evt)=>{
+        document.addEventListener('touchstart', (evt)=>{
                 if (!skip.classList.contains('show')) return;
-                if (!skip.contains(evt.target)) skip.classList.remove('show');
+                if (!skip.contains(evt.target)){
+                    skip.classList.remove('show');
+                    emitSeeProjectsState(false);
+            openedFully = false;
+                    tapCount = 0;
+                    lastOpenedAt = 0;
+                }
             }, {passive:true});
         }
     }
@@ -422,6 +663,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // Écouteur redondant (sécurité) si le script est rechargé dynamiquement
 const lateLangBtn = document.getElementById('langToggle');
 if(lateLangBtn && !lateLangBtn.__hasLangHandler){
-    lateLangBtn.addEventListener('click', cycleLang);
-    lateLangBtn.__hasLangHandler = true;
+    const __hoverDesktopLate = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (__hoverDesktopLate) {
+        lateLangBtn.addEventListener('click', cycleLang);
+        lateLangBtn.__hasLangHandler = true;
+    }
 }
