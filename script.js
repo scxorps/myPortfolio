@@ -501,10 +501,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!hoverCapable) {
             const headerToggle = document.getElementById('langToggle');
             if (headerToggle) {
+                let tapLock = false; // anti double-événements (pointerdown + click)
+                const safeOpenClose = (e)=>{
+                    e && e.preventDefault();
+                    if (tapLock) return;
+                    tapLock = true;
+                    if(root.classList.contains('open')) immediateClose(); else openMenu();
+                    setTimeout(()=> tapLock = false, 300);
+                };
                 // Permettre le shine si on ouvre via le bouton d'en-tête (mobile)
-                headerToggle.addEventListener('pointerdown', ()=>{ if(!root.classList.contains('open')) { allowShine(headerToggle); allowShine(mainLangBtn); } });
-                headerToggle.addEventListener('click', (e)=>{ e.preventDefault(); if(root.classList.contains('open')) immediateClose(); else openMenu(); });
+                headerToggle.addEventListener('pointerdown', (e)=>{ if(!root.classList.contains('open')) { allowShine(headerToggle); allowShine(mainLangBtn); } safeOpenClose(e); });
+                headerToggle.addEventListener('touchstart', (e)=>{ safeOpenClose(e); }, {passive:false});
+                headerToggle.addEventListener('click', (e)=>{ safeOpenClose(e); });
             }
+            // Sur certains navigateurs, capter pointerdown/touchstart sur le bouton principal aussi
+            let mainTapLock = false;
+            const safeToggleMain = (e)=>{
+                e && e.preventDefault();
+                if (mainTapLock) return;
+                mainTapLock = true;
+                if(root.classList.contains('open')) immediateClose(); else openMenu();
+                setTimeout(()=> mainTapLock = false, 300);
+            };
+            mainLangBtn.addEventListener('pointerdown', safeToggleMain);
+            mainLangBtn.addEventListener('touchstart', safeToggleMain, {passive:false});
         }
         // Accessibilité clavier: Enter/Espace ouvre et Tab circule
         mainLangBtn.addEventListener('keydown', e=>{
