@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting…</title>
+  <meta name="color-scheme" content="light dark">
+  <style>
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:var(--bg,#0d1117);color:var(--fg,#e6edf3);} 
+    .wrap{min-height:100%;display:grid;place-items:center;padding:24px;text-align:center}
+    .card{max-width:560px;border:1px solid rgba(125,125,125,.25);border-radius:12px;padding:20px 24px;background:rgba(255,255,255,.04)}
+    .btns{display:flex;gap:12px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+    a.btn{display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;background:#02aab0;color:#fff}
+    .hint{opacity:.8;font-size:.9rem;margin-top:10px}
+    @media (prefers-color-scheme: light){:root{--bg:#f6f8fa;--fg:#24292f}.card{background:#fff;color:#24292f;border-color:#d0d7de} a.btn{color:#fff}}
+  </style>
+  <script>
+    (function(){
+      try {
+        // Manual override via query (?view=mobile|desktop) and persist
+        var params = new URLSearchParams(location.search);
+        var qview = params.get('view');
+        if (qview === 'mobile' || qview === 'desktop') {
+          try { localStorage.setItem('preferredView', qview); } catch(_) {}
+        }
+        var pref = qview || (function(){ try { return localStorage.getItem('preferredView'); } catch(_) { return null; } })();
+
+        function isMobileLike(){
+          try {
+            var m1 = window.matchMedia('(max-width: 768px)').matches;
+            var m2 = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+            var ua = /Mobi|Android|iP(hone|ad|od)|Mobile/i.test(navigator.userAgent || '');
+            return m1 || m2 || ua;
+          } catch(_) { return false; }
+        }
+
+        var target = pref || (isMobileLike() ? 'mobile' : 'desktop');
+        var p = location.pathname || '/';
+        // Support GitHub Pages base path
+        var base = p.indexOf('/myPortfolio/') !== -1 ? '/myPortfolio/' : '/';
+        var dest = base + 'responsive/' + target + '/';
+
+        // Avoid loops if already at destination
+        if (location.pathname.indexOf('/responsive/' + target + '/') === -1) {
+          location.replace(dest);
+        } else if (!/\/index\.html$/.test(location.pathname)) {
+          location.replace(dest + 'index.html');
+        }
+      } catch(_) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="status" aria-live="polite">
+      <h1>Redirecting…</h1>
+      <p>If you’re not redirected automatically, choose a version below.</p>
+      <div class="btns">
+        <a class="btn" href="responsive/desktop/">Go to Desktop</a>
+        <a class="btn" href="responsive/mobile/">Go to Mobile</a>
+      </div>
+      <p class="hint">Tip: you can force a view with <code>?view=desktop</code> or <code>?view=mobile</code>.</p>
+      <noscript>
+        <p class="hint">JavaScript is disabled; use the buttons above.</p>
+      </noscript>
+    </div>
+  </div>
+</body>
+</html>
