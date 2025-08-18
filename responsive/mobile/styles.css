@@ -1,0 +1,79 @@
+/* Mobile overrides */
+/* Hide swiper arrows on small devices */
+.swiper-button-prev, .swiper-button-next { display: none !important; }
+/* Vidéo portrait (apps) */
+.video-frame.mobile-app video { max-width: 340px; width: 100%; }
+/* Make videos unclickable and non-selectable */
+.project-wrapper__image video {
+	pointer-events: none;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: none;
+	outline: none;
+}
+/* While hidden/loading, keep the video invisible to prevent native overlays from showing */
+.video-frame video.video-hidden { opacity: 0; visibility: hidden; }
+.video-frame video:not(.video-hidden) { opacity: 1; visibility: visible; }
+/* Hide native play overlay/button on WebKit browsers */
+.project-wrapper__image video::-webkit-media-controls-start-playback-button,
+.project-wrapper__image video::-webkit-media-controls-overlay-play-button,
+.project-wrapper__image video::-webkit-media-controls-play-button,
+.project-wrapper__image video::-webkit-media-controls-panel,
+.project-wrapper__image video::-webkit-media-controls,
+.project-wrapper__image video::-webkit-media-controls-enclosure {
+	display: none !important;
+	-webkit-appearance: none;
+}
+/* Désactiver le poster cliquable et les overlays résiduels */
+.project-wrapper__image video::-webkit-media-controls-controls-panel,
+.project-wrapper__image video::-webkit-media-controls-rewind-button,
+.project-wrapper__image video::-webkit-media-controls-toggle-closed-captions-button,
+.project-wrapper__image video::-webkit-media-controls-seek-back-button,
+.project-wrapper__image video::-webkit-media-controls-seek-forward-button,
+.project-wrapper__image video::-webkit-media-controls-pause-button { display: none !important; }
+/* Hide additional controls affordances on mobile */
+.project-wrapper__image video::-webkit-media-controls-fullscreen-button,
+.project-wrapper__image video::-webkit-media-controls-timeline,
+.project-wrapper__image video::-webkit-media-controls-mute-button,
+.project-wrapper__image video::-webkit-media-controls-volume-slider,
+.project-wrapper__image video::-webkit-media-controls-pip-button {
+	display: none !important;
+}
+/* Center project CTA under video */
+.project-cta { margin-top: 12px; text-align: center; }
+.project-cta .project-source-btn { min-width: 200px; display: inline-block; }
+
+/* Ensure border is visible even while video is loading (video hidden) */
+.video-frame {
+	border: 2px solid var(--light-grey);
+	border-radius: 10px;
+	overflow: hidden; /* clip loader & video corners */
+	position: relative; /* stack loader above video */
+	width: 100%;
+	max-width: 100%;
+	aspect-ratio: 16 / 9; /* cadre paysage par défaut (avant chargement) */
+}
+.video-frame.mobile-app { aspect-ratio: 9 / 16; }
+/* Avoid double border: remove border from the video itself on mobile */
+.project-wrapper__image video {
+	border: none !important;
+	border-radius: 10px; /* keep rounded corners */
+}
+/* Keep loader centered inside the bordered frame (inherits from shared CSS) */
+.video-frame .video-loader {
+	display: none; /* shown by JS while loading */
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+}
+
+/* La vidéo remplit la frame (ratio respecté via object-fit) */
+.project-wrapper__image video {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: contain !important;
+}

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — Desktop</title>
+    <meta name="description" content="Desktop version of the portfolio.">
+    <meta name="theme-color" content="#02aab0" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+    <meta name="color-scheme" content="light dark">
+    <link rel="shortcut icon" type="image/svg+xml" href="../../assets/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles.css?v=3">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js" defer></script>
+    <script>
+      (function(){
+        try {
+          var saved = localStorage.getItem('theme');
+          if(saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)){
+            document.body ? document.body.setAttribute('data-theme','dark') : document.addEventListener('DOMContentLoaded', function(){document.body.setAttribute('data-theme','dark');});
+          }
+        } catch(e) {}
+      })();
+    </script>
+</head>
+<body>
+    <a href="#projects" class="skip-link" data-i18n="skip.projects">See projects</a>
+    <!-- Dark Mode Toggle + Language Switcher -->
+    <div class="dark-mode-toggle" id="darkModeContainer">
+        <button id="darkModeToggle" class="dark-mode-btn" aria-label="Toggle dark mode" title="Changer de thème" data-i18n-aria-label="aria.themeToggle" data-i18n-title="aria.themeToggle">
+            <span class="sun-icon"><i class="fa fa-sun-o"></i></span>
+            <span class="moon-icon" style="display: none;"><i class="fa fa-moon-o"></i></span>
+        </button>
+    </div>
+    <!-- Language Toggle Menu (bottom-right) -->
+    <div class="lang-toggle-container" id="langMenu">
+        <div class="lang-bubbles">
+            <button id="langMain" class="dark-mode-btn lang-btn" aria-haspopup="true" aria-expanded="false" aria-label="Switch language" title="Change language" data-i18n-aria-label="aria.langToggle" data-i18n-title="aria.langToggle">
+                <span id="langCode" class="lang-code">EN</span>
+            </button>
+            <div class="lang-options" role="menu" aria-label="Languages">
+                <button class="dark-mode-btn lang-option" data-lang="en" role="menuitem" aria-label="English" data-i18n-aria-label="aria.langEN">EN</button>
+                <button class="dark-mode-btn lang-option" data-lang="fr" role="menuitem" aria-label="Français" data-i18n-aria-label="aria.langFR">FR</button>
+                <button class="dark-mode-btn lang-option" data-lang="ar" role="menuitem" aria-label="العربية" data-i18n-aria-label="aria.langAR">AR</button>
+            </div>
+        </div>
+    </div>
+
+    <section id="hero">
+        <div class="container">
+            <h1 class="hero-title">
+                <span data-i18n="hero.greeting.prefix">Hi, my name is</span> <span class="text-color-main" data-i18n="hero.name">Mehadji Mohamed El Habib</span>
+            </h1>
+            <h2>
+                <span id="typewriter"></span><span id="cursor">|</span>
+            </h2>
+            <p style="margin-top: 30px;">
+                <a class="cta-btn" href="#about" data-i18n="hero.knowMore">Know more</a>
+            </p>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title reveal" data-i18n="about.title">About me</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="about-wrapper__image text-center reveal-left">
+                        <img src="../../assets/profile.jpg" alt="Profile Image" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="about-wrapper__info reveal-right">
+                        <p class="about-wrapper__info-text" data-i18n="about.p1">
+                            Hi, I'm Mehadji Mohamed El Habib — a developer who thinks in logic and builds with purpose.
+                            I enjoy breaking down complex problems, finding solutions, and turning ideas into working systems.
+                        </p>
+                        <p class="about-wrapper__info-text" data-i18n="about.p2">
+                            Let's build something smart together.
+                        </p>
+                        <a class="cta-btn cta-btn--resume" href="../../assets/resume.pdf" target="_blank">
+                            <span data-i18n="about.resume">View Resume</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title" data-i18n="projects.title">Projects</h2>
+
+            <div class="swiper projects-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="row project-wrapper mb-5">
+                            <div class="col-lg-4">
+                                <div class="project-wrapper__text">
+                                    <h3 class="project-wrapper__text-title">DEMIO</h3>
+                                    <p data-i18n="projects.demio.desc">
+                                        A smart tool for predicting and organizing the fight against tuberculosis.
+                                        Demio is an AI-powered web app designed to help healthcare teams predict future TB outbreaks across regions.
+                                    </p>
+                                    <a class="cta-btn cta-btn--resume" href="https://github.com/scxorps/demio" target="_blank">
+                                        <span data-i18n="projects.source">Source Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="project-wrapper__image text-center">
+                                    <div class="video-frame">
+                                        <video autoplay loop muted playsinline webkit-playsinline preload="metadata" class="video-hidden" data-src="../../assets/demio-demo.mp4" style="border-radius: 10px;">
+                                            <source type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <div class="video-loader" aria-hidden="true"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="row project-wrapper mb-5 reveal-scale">
+                            <div class="col-lg-4">
+                                <div class="project-wrapper__text">
+                                    <h3 class="project-wrapper__text-title">DAWRA</h3>
+                                    <p data-i18n="projects.dawra.desc">
+                                        Dawra is a fresh idea of a trip app that I developed on my Flutter learning path.
+                                        It presents traveling trips by categories, trips details, trips filtering and favorites section.
+                                    </p>
+                                    <a class="cta-btn cta-btn--resume" href="https://github.com/scxorps/dawra" target="_blank">
+                                        <span data-i18n="projects.source">Source Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="project-wrapper__image text-center">
+                                    <div class="video-frame mobile-app">
+                                        <video autoplay loop muted playsinline webkit-playsinline preload="metadata" class="video-hidden" data-src="../../assets/dawra-demo.mp4" style="border-radius: 10px;">
+                                            <source type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <div class="video-loader" aria-hidden="true"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="row project-wrapper reveal-scale mb-5">
+                            <div class="col-lg-4">
+                                <div class="project-wrapper__text">
+                                    <h3 class="project-wrapper__text-title">WEATHERLY</h3>
+                                    <p data-i18n="projects.weatherly.desc">
+                                        A weather app that displays your position's weather condition, sunrise time, sunset time, max/min temp.
+                                        This project showcases API integration, geolocation services, and responsive design.
+                                    </p>
+                                    <a class="cta-btn cta-btn--resume" href="https://github.com/scxorps/WEATHERLY" target="_blank">
+                                        <span data-i18n="projects.source">Source Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="project-wrapper__image text-center">
+                                    <div class="video-frame mobile-app">
+                                        <video autoplay loop muted playsinline webkit-playsinline preload="metadata" class="video-hidden" data-src="../../assets/weatherly-demo.mp4" style="border-radius: 10px;">
+                                            <source type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <div class="video-loader" aria-hidden="true"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide">
+                        <div class="row project-wrapper reveal-scale">
+                            <div class="col-lg-4">
+                                <div class="project-wrapper__text">
+                                    <h3 class="project-wrapper__text-title">HAND VOLUME CONTROL</h3>
+                                    <p data-i18n="projects.handvolume.desc">
+                                        Hand Gesture Volume Control – Real-time OpenCV & MediaPipe app: left-hand pinch enables control and right-hand pinch distance adjusts system volume via PyCaw, with visual feedback & FPS tracking.
+                                    </p>
+                                    <a class="cta-btn cta-btn--resume" href="https://github.com/scxorps/computer-vision-" target="_blank">
+                                        <span data-i18n="projects.source">Source Code</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="project-wrapper__image text-center">
+                                    <div class="video-frame">
+                                        <video autoplay loop muted playsinline webkit-playsinline preload="metadata" class="video-hidden" data-src="../../assets/handvolumecontroler.mp4" style="border-radius: 10px; width:100%;">
+                                            <source type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <div class="video-loader" aria-hidden="true"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title reveal" data-i18n="contact.title">Contact</h2>
+            <div class="contact-wrapper reveal">
+                <p class="contact-wrapper__text" data-i18n="contact.p1">I'm always up for smart projects, cool ideas, or interesting conversations.</p>
+                <p class="contact-wrapper__text" data-i18n="contact.p2">Drop a message — let's make it happen.</p>
+                <div>
+                    <a class="cta-btn" href="mailto:mohamed79163@email.com" data-i18n="contact.email">Email Me</a>
+                    <a class="cta-btn" href="tel:+213551997620" data-i18n="contact.call">Call Me</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <a href="#hero" class="back-to-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/mohamed-mehadji-a65649179" target="_blank" rel="noopener" aria-label="LinkedIn">
+                    <i class="fa fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/scxorps" target="_blank">
+                    <i class="fa fa-github"></i>
+                </a>
+                <a href="https://www.instagram.com/mohamed__mehadji" target="_blank" aria-label="Instagram">
+                    <i class="fa fa-instagram"></i>
+                </a>
+                <a href="https://wa.me/213551997620" target="_blank" aria-label="WhatsApp" rel="noopener">
+                    <i class="fa fa-whatsapp"></i>
+                </a>
+            </div>
+            <p data-i18n="footer.rights">&copy; 2025 Mehadji Mohamed El Habib. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../../script.js?v=13"></script>
+    <script src="script.js"></script>
+</body>
+</html>
